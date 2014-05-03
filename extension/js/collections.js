@@ -282,7 +282,7 @@
 					//+"<div class=\"clearfix\">"
 					//+"<div class=\"_ohe lfloat\">"
 					//+"<a class=\"img _8o _8r UFIImageBlockImage UFILikeThumb\" href=\"#\" title=\"Like thiz\" role=\"button\" ><img</a>"
-					+"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\"></a>"
+					+"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/collect_E1.png") + "\"></a>"
 					//+"<div>"
 					//+"<div class=\"UFIImageBlockContent _42ef _8u\">"
 					//+"<div class=\"UFILikeSentenceText\">"
