@@ -148,11 +148,22 @@
             var fullUrl = baseUrl + post.postid;
           }
           var $element = $('<a class="postCollected" href='+fullUrl+'></a>');
+          var str;
           if(fullUrl.indexOf('photo.php') > -1){
-            $element.load(fullUrl + " #fbxPhotoContentContainer");
+            str = fullUrl + " #fbxPhotoContentContainer";
           }else if(fullUrl.indexOf('photos') > -1){
-            $element.load(fullUrl + " #photoborder");
+            str = fullUrl + " #photoborder";
           }
+            $element.load(str,function(){
+                $('.postCollected').children().each(function(){
+                    var x = $(this);
+                    x.css("background-color","white");
+                    x.css("padding","30px");
+                    x.css("width","600px");
+                    x.css("color","black");
+                    x.css("margin-bottom","15px");
+                });
+            });
           $('#stream_pagelet').append($element);
         });
       });
