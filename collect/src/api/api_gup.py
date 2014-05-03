@@ -64,7 +64,9 @@ class CollectApi(remote.Service):
         """Queries the DB for an Entity with the given ID."""
         if not entity.from_datastore:
             raise endpoints.NotFoundException('entity not found')
-        return message_types.VoidMessage()
+
+        entity.key.delete()
+        return entity
 
 
     @EntityInfo.method(request_fields=('postid',),

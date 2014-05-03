@@ -6,7 +6,7 @@ from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 
 class Entity(EndpointsModel):
 
-    _message_fields_schema = ('id', 'userid', 'postid', 'tags',)
+    _message_fields_schema = ('id', 'userid', 'postid', 'tags', 'icon',)
 
     userid = ndb.StringProperty(indexed=True)
     postid = ndb.StringProperty(indexed=True)
