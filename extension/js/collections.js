@@ -156,17 +156,19 @@
           }else if(fullUrl.indexOf('posts') > -1){
             str = fullUrl + " #contentArea";
           }
-          console.log(fullUrl);
-            $element.load(str,function(){
-                $('.postCollected').children().each(function(){
-                    var x = $(this);
-                    x.css("background-color","white");
-                    x.css("padding","30px");
-                    x.css("width","600px");
-                    x.css("color","black");
-                    x.css("margin-bottom","15px");
-                });
-            });
+
+
+          $element.load(str,function(){
+              $('.postCollected').children().each(function(){
+                  var x = $(this);
+                  x.css("background-color","white");
+                  x.css("padding","30px");
+                  x.css("width","600px");
+                  x.css("color","black");
+                  x.css("margin-bottom","15px");
+              });
+
+          });
           $('#stream_pagelet').append($element);
         });
       });
