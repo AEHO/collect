@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript">
+  $(function () {
+      $.ajax({
+        type: 'GET',
+        url: 'http://localhost:8080/_ah/api/collectapi/v1/entities'
+      }).success(handleData);
+
+      function handleData (data) {
+        if (!data.items) throw new Error('Data returned error');
+
+        var counters = {};
+
+        var items = data.items;
+        for (var i in items) {
+          var tags = items[i].tags;
+
+          if (tags) {
+            for (var j in tags) {
+              if (counters[tags[j]]) {
+                counters[tags[j]] += 1;
+              } else {
+                counters[tags[j]] = 1;
+              }
+            }
+          }
+        }
+
+        data.counters = counters;
+
+        return data;
+      }
+  });
+
+</script>
+</body>
+</html>

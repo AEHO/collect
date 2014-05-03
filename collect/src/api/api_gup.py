@@ -8,7 +8,6 @@ from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
 from api.models import Entity, EntityCollection
-from api.models import Info
 
 @endpoints.api(name="collectapi", version="v1", description="Collect Facebook API",
                allowed_client_ids=[endpoints.API_EXPLORER_CLIENT_ID],
@@ -29,7 +28,9 @@ class CollectApi(remote.Service):
                    http_method='POST',
                    name='entity.post')
     def EntityPost(self, entity):
-        entity.put()
+        if entity.userid:
+            entity.put()
+
         return entity
 
     @EntityCollection.method(path='entities',
