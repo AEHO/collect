@@ -11,7 +11,7 @@ class Entity(EndpointsModel):
     userid = ndb.StringProperty(indexed=True)
     postid = ndb.StringProperty(indexed=True)
     tags = ndb.StringProperty(repeated=True)
-
+    icon = ndb.IntegerProperty()
 
 class EntityCollection(EndpointsModel):
 
@@ -19,3 +19,15 @@ class EntityCollection(EndpointsModel):
 
     _message_fields_schema = ('id', 'items',)
     items = ndb.LocalStructuredProperty(Entity, repeated=True)
+
+
+class EntityInfo(EndpointsModel):
+
+    postid = ndb.StringProperty()
+    count = ndb.IntegerProperty()
+
+
+class EntityInfoCollection(EndpointsModel):
+
+    _message_fields_schema = ('id', 'items',)
+    items = ndb.LocalStructuredProperty(EntityInfo, repeated=True)
