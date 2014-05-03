@@ -1,6 +1,7 @@
 //Classes dos posts ._4-u2.mbm._5jmm
 
 (function(){
+
     var myId;
 
     $('._4-u2.mbm._5jmm ._5pcq').each(function(){
@@ -106,8 +107,20 @@
                         $(this).after(e);
                         $(this).after(" · ");
                     });
+
+        			// contador de likes, comments, shares
+					a.find(".UFIBlingBox.uiBlingBox.feedbackBling").each(function(){
+						var b = $(this);
+						console.log(b);
+						var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\">"
+							+"<span class=\"UFIBlingBoxText\">666</span>" // setar o numero de collects aqui
+							+"</span>");
+						b.append(e);
+					});
                 }
-            })
+            });
+
+
         });
     };
 
