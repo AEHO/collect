@@ -27,18 +27,45 @@
 
     };
 
+    function initializeTypeahead (data) {
+
+        var states = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: data
+        });
+
+        states.initialize();
+
+        $('#input').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'states',
+            displayKey: 'value',
+            source: states.ttAdapter()
+        });
+    }
+
+
     var createModal = function(){
+
     	var $div_modal = $('<div id="modal-container" class="_s"></div>')
     	var $modal = $('<div class="modal" id="collectModal"></div>');
         var $head_modal = $('<div class="_4-i0" id="u_9_0">'
-+'<div class="clearfix">'
-+'<div class="_52c9 lfloat _ohe">Collect This Post</div>'
-+'<div class="_51-u rfloat _ohf">'
-+'<a class="_42ft _5upp _50zy layerCancel _51-t _50-0 _50z-" role="button" href="#" title="Close" onclick="toggleModal();">Close</a></div>'
-+'</div></div>');
+            +'<div class="clearfix">'
+            +'<div class="_52c9 lfloat _ohe">Collect This Post!</div>'
+            +'<div class="_51-u rfloat _ohf">'
+            +'<a class="_42ft _5upp _50zy layerCancel _51-t _50-0 _50z-" role="button" href="#" title="Close" onclick="toggleModal();">Close</a></div>'
+            +'</div></div>');
 
     	//var $content = $('<select class="collectSelect"><option>+Gostosas</option></select>');
-        var $content = $('<div class="_4-i2"><div class="pam"><select class="collectSelect"><option>+Gostosas</option></select></div></div>');
+        // var $content = $('<div class="_4-i2"><div class="pam"><select class="collectSelect"><option>+Gostosas</option></select></div></div>');
+
+        var $content = $('<div class=_4-i2><div class=pam><p>Choose the collections that this post should belong to!</p><input placeholder="Collection Name" id=inp-collection></div></div>');
+
         var $footer = $('<div class="_5a8u"><div class="uiOverlayFooter uiBoxGray noborder"><table class="uiGrid _51mz uiOverlayFooterGrid" cellspacing="0" cellpadding="0"><tbody><tr class="_51mx">'
             +'<td class="_51m- prs uiOverlayFooterMessage"></td>'
             +'<td class="_51m- uiOverlayFooterButtons _51mw"><button value="1" class="collectButton _42ft _4jy0 layerConfirm uiOverlayButton _4jy3 _4jy1 selected" type="submit">Collect Post</button><a class="cancelButton _42ft _4jy0 layerCancel uiOverlayButton _4jy3 _517h" role="button" href="#">Cancel</a></td>'
@@ -162,7 +189,7 @@
 				//a.css("list-style","none");
                 if(!$this.attr('data-addedCollect2')){
                     $this.attr('data-addedCollect2', true);
-					
+
             		var e = $("<li class=\"UFIRow UFILikeSentence UFIFirstComponent\">"
 					//+"<div class=\"clearfix\">"
 					//+"<div class=\"_ohe lfloat\">"
@@ -191,7 +218,7 @@
                 }
 				/*
 				var b = $(this);
-				
+
 				*/
 			});
 
