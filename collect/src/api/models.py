@@ -4,7 +4,6 @@ from google.appengine.ext import ndb
 from endpoints_proto_datastore.ndb import EndpointsModel
 from endpoints_proto_datastore.ndb import EndpointsAliasProperty
 
-
 class Entity(EndpointsModel):
 
     _message_fields_schema = ('id', 'userid', 'postid', 'tags',)
@@ -20,4 +19,3 @@ class EntityCollection(EndpointsModel):
 
     _message_fields_schema = ('id', 'items',)
     items = ndb.LocalStructuredProperty(Entity, repeated=True)
-
