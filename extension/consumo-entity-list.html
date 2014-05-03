@@ -5,15 +5,24 @@
 </head>
 <body>
 
+<input type="text" id="input">
+<input type="button" id="submit-btn" value="submeter">
+
+<ul id="adicionados"></ul>
+
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
 <script type="text/javascript">
   $(function () {
-      $.ajax({
-        type: 'GET',
-        url: 'http://localhost:8080/_ah/api/collectapi/v1/entities'
-      }).success(handleData);
 
-      function handleData (data) {
+      function getData (userid) {
+        return $.ajax({
+          type: 'GET',
+          url: 'http://localhost:8080/_ah/api/collectapi/v1/entities?userid=' + userid
+        });
+      }
+
+      function addCounterToData (data) {
         if (!data.items) throw new Error('Data returned error');
 
         var counters = {};
@@ -37,6 +46,46 @@
 
         return data;
       }
+
+      function initializeTypeahead (data) {
+
+        var states = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          // `states` is an array of state names defined in "The Basics"
+          local: [{value: 'alabama'}, {value: 'dahora'}]
+        });
+
+        states.initialize();
+
+        $('#input').typeahead({
+          hint: true,
+          highlight: true,
+          minLength: 1
+        },
+        {
+          name: 'states',
+          displayKey: 'value',
+          // `ttAdapter` wraps the suggestion engine in an adapter that
+          // is compatible with the typeahead jQuery plugin
+          source: states.ttAdapter()
+        });
+      }
+
+    $('#submit-btn').click(function (ev) {
+      ev.preventDefault();
+
+      var value = $('#input').val();
+      $('#adicionados').append("<li>" + value + "</li>");
+      $('#input').val("").focus();
+    });
+
+    getData('ciro').success(function (data) {
+      console.log(addCounterToData(data));
+
+      initializeTypeahead(data.items);
+    });
+
   });
 
 </script>
