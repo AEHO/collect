@@ -48,7 +48,7 @@
     		e.preventDefault();
     		toggleModal();
     	});
-
+    	$div_modal.hide();
         $('body').append($div_modal);
         return $div_modal;
     };
