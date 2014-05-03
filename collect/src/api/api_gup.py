@@ -7,7 +7,7 @@ from google.appengine.ext import ndb
 from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
-from api.models import Entity, EntityCollection
+from api.models import Entity, EntityCollection, EntityInfo, EntityInfoCollection
 
 @endpoints.api(name="collectapi", version="v1", description="Collect Facebook API",
                allowed_client_ids=[endpoints.API_EXPLORER_CLIENT_ID],
@@ -19,6 +19,8 @@ class CollectApi(remote.Service):
     @Entity.query_method(query_fields=('limit', 'pageToken', 'order',
                                        'userid', 'postid', 'tags',),
                          path="entities",
+                         limit_default=1000,
+                         limit_max=2000,
                          http_method="GET",
                          name="entities.list")
     def EntityList(self, query):
@@ -59,3 +61,27 @@ class CollectApi(remote.Service):
         if not entity.from_datastore:
             raise endpoints.NotFoundException('entity not found')
         return message_types.VoidMessage()
+
+    @EntityInfo.method(request_fields=('postid',),
+                       path="entity/info/{postid}",
+                       http_method="GET",
+                       name="entity.info.get")
+    def EntityInfoGet(self, entity):
+
+        iterator = Entity.query(Entity.postid == entity.postid).iter()
+        count = 0
+        while iterator.has_next():
+            count += 1
+            iterator.next()
+
+        entity.count = count
+
+        return entity
+
+    @EntityInfoCollection.method(path="entity/info",
+                       http_method="GET",
+                       name="entity.info.list")
+    def EntityInfoList(self, entity_info_collection):
+        print entity_info_collection.items
+
+        return entity_info_collection
