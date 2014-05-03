@@ -19,10 +19,10 @@
     var myId;
     var $div_modal;
     var collections;
+    var $collectionsNav;
 
     var toggleModal = function(){
       $div_modal.fadeToggle(300);
-      collections = [];
       $('#collections-list').html('');
     };
 
@@ -153,7 +153,10 @@
             str = fullUrl + " #fbxPhotoContentContainer";
           }else if(fullUrl.indexOf('photos') > -1){
             str = fullUrl + " #photoborder";
+          }else if(fullUrl.indexOf('posts') > -1){
+            str = fullUrl + " #contentArea";
           }
+          console.log(fullUrl);
             $element.load(str,function(){
                 $('.postCollected').children().each(function(){
                     var x = $(this);
@@ -169,14 +172,8 @@
       });
     }
 
-    function addCollectionSectionToSidebar () {
-      var $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
-                            '<h4 class="navHeader">COLLECTIONS</h4>' +
-                            '<ul class="uiSideNav mts mbm nonDroppableNav">' +
-                              '</ul>' +
-                          '</div>');
-      $.each(collections.counters, function(collection, count){
-        var $collectionItem = $('<li class="sideNavItem stat_elem">' +
+    function addNewCollection(collection, count){
+      var $element = $('<li class="sideNavItem stat_elem" id="' + collection + '_collection_item">' +
                               '<a class="item clearfix sortableItem collectionPlus" data-collect="'+collection+'">' +
                                 '<div class="rfloat">' +
                                     '<span class="count">' +
@@ -189,7 +186,17 @@
                                 '</div>' +
                               '</a>' +
                             '</li>');
-        $collectionsNav.find('ul').append($collectionItem);
+      $collectionsNav.find('ul').append($element);
+    };
+
+    function addCollectionSectionToSidebar () {
+      $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
+                            '<h4 class="navHeader">COLLECTIONS</h4>' +
+                            '<ul class="uiSideNav mts mbm nonDroppableNav">' +
+                              '</ul>' +
+                          '</div>');
+      $.each(collections.counters, function(collection, count){
+        addNewCollection(collection, count);
       });
 
 
@@ -222,15 +229,14 @@
 
         $collectButton.unbind('click');
         $collectButton.click(function () {
-            var collections = [];
+            var collectionsAdded = [];
             $('#collections-list').children().each(function (key,value) {
-                collections.push($(value).text());
+                collectionsAdded.push($(value).text());
             });
-            console.log(postId);
             var data = JSON.stringify({
                     postid: postId,
                     userid: myId,
-                    tags: collections
+                    tags: collectionsAdded
                 });
 
             $.ajax({
@@ -240,7 +246,17 @@
                 type:'POST',
                 data: data
             }).success(function (data) {
-                toggleModal();
+              for(var index in data.tags){
+                var tag = data.tags[index];
+                if(collections.counters[tag]){
+                  $("#"+tag+'_collection_item').remove()
+                  collections.counters[tag].push(data);
+                }else{
+                  collections.counters[tag] = [data];
+                }
+                addNewCollection(tag, collections.counters[tag]);
+              }
+              toggleModal();
             });
         });
         toggleModal();
@@ -254,6 +270,7 @@
                 var $this = $(this);
                 if($this.attr('class') === "_5pcq"){
                     postId = $this.attr('href');
+                    return false;
                 }
             });
 
@@ -321,7 +338,7 @@
 				*/
 			});
 
-        });
+    });
 
         // botões Like ·  Comment · Collect ·  Share em fotos e videos
         $('.UIActionLinks.UIActionLinks_bottom').each(function(){
@@ -356,6 +373,7 @@
     }
 
     function main () {
+
         myId = getMyId();
         $div_modal = createModal();
         getData(myId).done(function(data){
@@ -372,7 +390,5 @@
         });
         setInterval(setIcons, 1000);
     }
-
-    main();
-
+    setTimeout(main, 500);
 })();
