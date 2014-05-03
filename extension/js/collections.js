@@ -1,7 +1,7 @@
 //Classes dos posts ._4-u2.mbm._5jmm
 
 
-    	// var data = {
+      // var data = {
      //            userid: myId.toString(),
      //            postid: $(this).attr('data-postid')
      //        };
@@ -18,13 +18,11 @@
 
     var myId;
     var $div_modal;
+    var collections;
+    var postId;
 
     var toggleModal = function(){
-    	$div_modal.fadeToggle(300);
-    };
-
-    var setModal = function(postId){
-
+      $div_modal.fadeToggle(300);
     };
 
     function initializeTypeahead (data) {
@@ -37,7 +35,7 @@
 
         states.initialize();
 
-        $('#input').typeahead({
+        $('#inp-collection').typeahead({
             hint: true,
             highlight: true,
             minLength: 1
@@ -52,27 +50,33 @@
 
     var createModal = function(){
 
+        if (collections) {
+            initializeTypeahead($.map(Object.keys(data.counters), function (item) {
+                return {value: item};
+            }));
+        }
+
     	var $div_modal = $('<div id="modal-container" class="_s"></div>')
     	var $modal = $('<div class="modal" id="collectModal"></div>');
         var $head_modal = $('<div class="_4-i0" id="u_9_0">'
             +'<div class="clearfix">'
             +'<div class="_52c9 lfloat _ohe">Collect This Post!</div>'
             +'<div class="_51-u rfloat _ohf">'
-            +'<a class="_42ft _5upp _50zy layerCancel _51-t _50-0 _50z-" role="button" href="#" title="Close" onclick="toggleModal();">Close</a></div>'
+            +'<a class="_42ft _5upp _50zy layerCancel _51-t _50-0 _50z- cancelIcon" role="button" href="#" title="Close" onclick="toggleModal();">Close</a></div>'
             +'</div></div>');
 
     	//var $content = $('<select class="collectSelect"><option>+Gostosas</option></select>');
         // var $content = $('<div class="_4-i2"><div class="pam"><select class="collectSelect"><option>+Gostosas</option></select></div></div>');
 
-        var $content = $('<div class=_4-i2><div class=pam><p>Choose the collections that this post should belong to!</p><input placeholder="Collection Name" id=inp-collection></div></div>');
+        var $content = $('<div class=_4-i2><div class=pam><p>Choose the collections that this post should belong to!</p><input placeholder="Collection Name" id=inp-collection><input type=button value=Add id=btn-modal-add><ul id=collections-list></ul></div></div>');
 
         var $footer = $('<div class="_5a8u"><div class="uiOverlayFooter uiBoxGray noborder"><table class="uiGrid _51mz uiOverlayFooterGrid" cellspacing="0" cellpadding="0"><tbody><tr class="_51mx">'
             +'<td class="_51m- prs uiOverlayFooterMessage"></td>'
             +'<td class="_51m- uiOverlayFooterButtons _51mw"><button value="1" class="collectButton _42ft _4jy0 layerConfirm uiOverlayButton _4jy3 _4jy1 selected" type="submit">Collect Post</button><a class="cancelButton _42ft _4jy0 layerCancel uiOverlayButton _4jy3 _517h" role="button" href="#">Cancel</a></td>'
             +'</tr></tbody></table></div></div>');
 
-        //var $sendButton = $('<button class="collectButton">Collect</button>');
-    	//var $cancelButton = $('<button class="cancelButton">Cancel</button>');
+      //var $sendButton = $('<button class="collectButton">Collect</button>');
+    	var $cancelButton = $('<button class="cancelButton">Cancel</button>');
     	var $black = $('<div class="black"></div>');
 
     	$modal.append($head_modal);
@@ -86,37 +90,105 @@
     		toggleModal();
     	});
     	$div_modal.hide();
+
         $('body').append($div_modal);
+
+        $('.cancelIcon').click(function () {
+            toggleModal();
+        });
+
+        $('.cancelButton').click(function (ev) {
+            toggleModal();
+        });
+
+        $('#btn-modal-add').click(function () {
+            var valor = $('#inp-collection').val();
+            $('#collections-list').append('<li>' + valor + '</li>');
+
+            $('#inp-collection').val("").focus();
+        });
+
+        $('.collectButton').click(function () {
+            var collections = [];
+            $('#collections-list').children().each(function (key,value) {
+                collections.push($(value).text());
+            });
+
+            $.ajax({
+                url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                type:'POST',
+                data: JSON.stringify({
+                    postid: postId,
+                    userid: myId,
+                    tags: collections
+                })
+            }).success(function (data) {
+                toggleModal();
+            });
+        });
+
         return $div_modal;
     };
 
+    var viewCollection = function(collection){
+      $('#stream_pagelet').html("");
+
+    };
+
+    function addCounterToData (data) {
+      if (!data.items) throw new Error('Data returned error');
+
+      var counters = {};
+
+      var items = data.items;
+      for (var i in items) {
+        var tags = items[i].tags;
+
+        if (tags) {
+          for (var j in tags) {
+            if (counters[tags[j]]) {
+              counters[tags[j]] += 1;
+            } else {
+              counters[tags[j]] = 1;
+            }
+          }
+        }
+      }
+
+      data.counters = counters;
+
+      return data;
+    }
+
 
     function addCollectionSectionToSidebar () {
-    	var $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
-	                    			'<h4 class="navHeader">COLLECTIONS</h4>' +
-	                    			'<ul class="uiSideNav mts mbm nonDroppableNav">' +
-	                      			'</ul>' +
-	                    		'</div>');
+      var $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
+                            '<h4 class="navHeader">COLLECTIONS</h4>' +
+                            '<ul class="uiSideNav mts mbm nonDroppableNav">' +
+                              '</ul>' +
+                          '</div>');
+        var $collectionItem = $('<li class="sideNavItem stat_elem">' +
+                              '<a class="item clearfix sortableItem" data-collect="Gostosas">' +
+                                '<div class="rfloat">' +
+                                    '<span class="count">' +
+                                        '<span class="countValue">20</span>' +
+                                    '</span>' +
+                                '</div>' +
+                                '<div>' +
+                                  '<span class="imgWrap"></span>' +
+                                  '<div class="linkWrap hasCount">+Gostosas</div>' +
+                                '</div>' +
+                              '</a>' +
+                            '</li>');
 
-    	var $collectionItem = $('<li class="sideNavItem stat_elem">' +
-		                          '<a class="item clearfix sortableItem">' +
-		                            '<div class="rfloat">' +
-		                                '<span class="count">' +
-		                                    '<span class="countValue">20</span>' +
-		                                '</span>' +
-		                            '</div>' +
-		                            '<div>' +
-		                              '<span class="imgWrap"></span>' +
-		                              '<div class="linkWrap hasCount">AlgoDahora</div>' +
-		                            '</div>' +
-		                          '</a>' +
-		                        '</li>');
 
-    	$collectionsNav.find('ul').append($collectionItem);
+      $collectionsNav.find('ul').append($collectionItem);
 
         $('#pagelet_pinned_nav')
             .append($collectionsNav);
-    }
+    };
 
 
 
@@ -138,8 +210,9 @@
 
     var sendCollect = function(e){
         e.preventDefault();
-        var postId = $(e).attr('data-postid');
-        setModal(postId);
+        postId = $(e).attr('data-postid');
+        // setModal(postId);
+
         toggleModal();
     };
 
@@ -158,7 +231,7 @@
                 }
             });
 
-            // contem os botões Like, Comment, Share.
+            // contem os botoes Like, Comment, Share.
             $this.find("._5pcp._5vsi.lfloat._ohe").each(function(){
                 var a = $(this);
                 if(!$this.attr('data-addedCollect')){
@@ -172,21 +245,21 @@
                         $(this).after(" · ");
                     });
 
-        			// contador de likes, comments, shares
-					a.find(".UFIBlingBox.uiBlingBox.feedbackBling").each(function(){
-						var b = $(this);
-						var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\">"
-							+"<span class=\"UFIBlingBoxText\">666</span>" // setar o numero de collects aqui
-							+"</span>");
-						b.append(e);
-					});
+              // contador de likes, comments, shares
+          a.find(".UFIBlingBox.uiBlingBox.feedbackBling").each(function(){
+            var b = $(this);
+            var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\">"
+              +"<span class=\"UFIBlingBoxText\">666</span>" // setar o numero de collects aqui
+              +"</span>");
+            b.append(e);
+          });
                 }
             });
 
-			// likes e shares acima dos comentários.
-			$this.find(".UFIList").each(function(){
-				var a = $(this);
-				//a.css("list-style","none");
+      // likes e shares acima dos comentários.
+      $this.find(".UFIList").each(function(){
+        var a = $(this);
+        //a.css("list-style","none");
                 if(!$this.attr('data-addedCollect2')){
                     $this.attr('data-addedCollect2', true);
 
@@ -222,8 +295,16 @@
 				*/
 			});
 
+
         });
     };
+
+    function getData (userid) {
+      return $.ajax({
+        type: 'GET',
+        url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entities?userid=' + userid
+      });
+    }
 
 
     var getMyId = function(){
@@ -236,6 +317,10 @@
     function main () {
         myId = getMyId();
         $div_modal = createModal();
+        getData(myId).done(function(data){
+          collections = addCounterToData(data);
+          //addCollectionSectionToSidebar();
+        });
         addCollectionSectionToSidebar();
         setInterval(setIcons, 1000);
     }
