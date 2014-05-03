@@ -49,8 +49,6 @@
 
             function initializeTypeahead (data) {
 
-                console.log(data);
-
                 var engine = new Bloodhound({
                     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                     queryTokenizer: Bloodhound.tokenizers.whitespace,

@@ -134,6 +134,7 @@
     }
 
     var setCollectionsEvents = function(){
+      $('.collectionPlus').unbind();
       $('.collectionPlus').on('click', function(e){
         e.preventDefault();
         var $this = $(this);
@@ -148,6 +149,10 @@
             var fullUrl = baseUrl + post.postid;
           }
           var $element = $('<a class="postCollected" href='+fullUrl+'></a>');
+          $element.on('click', function(e){
+            e.preventDefault();
+            console.log(post);
+          });
           var str;
           if(fullUrl.indexOf('photo.php') > -1){
             str = fullUrl + " #fbxPhotoContentContainer";
@@ -155,10 +160,30 @@
             str = fullUrl + " #photoborder";
           }else if(fullUrl.indexOf('posts') > -1){
             str = fullUrl + " #contentArea";
+          }else{
+            $element.remove();
+            return true;
           }
 
 
           $element.load(str,function(){
+                var $removeBtn = $('<a href="#">X Remove</a>');
+                $removeBtn.on('click', function(e){
+                  console.log(post.id);
+                  var data = {
+                    id: post.id
+                  };
+
+                  $.ajax({
+                    url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity',
+                    type:'DELETE',
+                    data: data
+                  }).success(function(){
+                    $element.remove();
+                  });
+
+                });
+                $removeBtn.insertBefore($(this));
               $('.postCollected').children().each(function(){
                   var x = $(this);
                   x.css("background-color","white");
@@ -167,6 +192,7 @@
                   x.css("color","black");
                   x.css("margin-bottom","15px");
               });
+
 
           });
           $('#stream_pagelet').append($element);
@@ -259,6 +285,7 @@
                 addNewCollection(tag, collections.counters[tag]);
               }
               toggleModal();
+              setCollectionsEvents();
             });
         });
         toggleModal();
