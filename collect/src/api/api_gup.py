@@ -85,3 +85,21 @@ class CollectApi(remote.Service):
         print entity_info_collection.items
 
         return entity_info_collection
+
+
+    # @Entity.method(request_fields=('userid', 'postid',),
+    #                path="bounce/make",
+    #                http_method="POST",
+    #                name="bounce.make")
+    # def BounceMake(self, entity):
+    #     if not entity.tags:
+    #         raise endpoints.BadRequestException('Malformed Entity')
+
+    #     return entity
+
+
+    # @Entity.method(path="bounce/consume",
+    #                http_method="GET",
+    #                name="bounce.consume")
+    # def BounceConsume(self, entity):
+    #     return entity
