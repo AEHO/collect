@@ -9,7 +9,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.facebook.com/*", "https://facebook.com/*"],
-      "js": ["js/jquery-1.11.1.min.js", "js/collections.js"],
+      "js": ["js/jquery-1.11.1.min.js", "js/typeahead.bundle.min.js", "js/collections.js"],
       "css": ["css/styles.css"]
     }
   ],
