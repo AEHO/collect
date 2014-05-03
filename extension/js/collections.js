@@ -4,45 +4,37 @@
 
     var myId;
 
-    $('._4-u2.mbm._5jmm ._5pcq').each(function(){
-        var $this = $(this);
-        if($this.attr('class') === "_5pcq" && $this.attr('rel') === undefined){
-            console.log(this);
-        }
-    });
+    var createModal = function(){
+    	var $div_modal = $('<div class="modal"></div>');
+    	var $h1_modal = $('<h1></h1>');
+    	$h1_modal.text('');
+    };
 
     function addCollectionSectionToSidebar () {
+    	var $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
+	                    			'<h4 class="navHeader">COLLECTIONS</h4>' +
+	                    			'<ul class="uiSideNav mts mbm nonDroppableNav">' +
+	                      			'</ul>' +
+	                    		'</div>');
+
+    	var $collectionItem = $('<li class="sideNavItem stat_elem">' +
+		                          '<a class="item clearfix sortableItem">' +
+		                            '<div class="rfloat">' +
+		                                '<span class="count">' +
+		                                    '<span class="countValue">20</span>' +
+		                                '</span>' +
+		                            '</div>' +
+		                            '<div>' +
+		                              '<span class="imgWrap"></span>' +
+		                              '<div class="linkWrap hasCount">AlgoDahora</div>' +
+		                            '</div>' +
+		                          '</a>' +
+		                        '</li>');
+
+    	$collectionsNav.find('ul').append($collectionItem);
+
         $('#pagelet_pinned_nav')
-            .append('<div class="homeSideNav collectionsNav">' +
-                      '<h4 class="navHeader">COLLECTIONS</h4>' +
-                      '<ul class="uiSideNav">' +
-
-                        '<li class="sideNavItem stat_elem">' +
-                          '<a>' +
-                            '<div class="rfloat">' +
-                                '<span class="count">' +
-                                    '<span class="countValue">20</span>' +
-                                '</span>' +
-                            '</div>' +
-                            '<div>' +
-                              '<span class="imgWrap"></span>' +
-                              '<div class="linkWrap hasCount">AlgoDahora</div>' +
-                            '</div>' +
-                          '</a>' +
-                        '</li>' +
-
-                        '<li class="sideNavItem stat_elem">' +
-                          '<a>' +
-                            '<div class="rfloat"><span class="count"><span class="countValue">20</span></span></div>' +
-                            '<div>' +
-                              '<span class="imgWrap"></span>' +
-                              '<div class="linkWrap hasCount">AlgoDahora</div>' +
-                            '</div>' +
-                          '</a>' +
-                        '</li>' +
-
-                      '</ul>' +
-                    '</div>');
+            .append($collectionsNav);
     }
 
 
@@ -90,7 +82,6 @@
 					var id = $this.attr('href').match(postIdFiler);
 					if(id !== null){
 						postId = id[1];
-						console.log(postId);
 					}
 				}
 			});
@@ -123,6 +114,7 @@
 
     function main () {
         myId = getMyId();
+        addCollectionSectionToSidebar();
         setInterval(setIcons, 1000);
     }
 
