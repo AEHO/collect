@@ -46,3 +46,14 @@
 	font-style: bold;
 	font-size: 14pt;
 }
+
+.tt-dropdown-menu{
+	background-color: white;
+	padding: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.tt-suggestions{
+	margin-bottom: 1px solid #ccc;
+}
