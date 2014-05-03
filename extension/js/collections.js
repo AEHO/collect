@@ -1,48 +1,84 @@
 //Classes dos posts ._4-u2.mbm._5jmm
 
+
+    	// var data = {
+     //            userid: myId.toString(),
+     //            postid: $(this).attr('data-postid')
+     //        };
+
+     //    $.ajax({
+     //        type: 'POST',
+     //        contentType: 'application/json; charset=utf-8',
+     //        dataType: 'json',
+     //        data: JSON.stringify(data),
+     //        url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity'
+     //    });
+
 (function(){
 
     var myId;
+    var $div_modal;
 
-    $('._4-u2.mbm._5jmm ._5pcq').each(function(){
-        var $this = $(this);
-        if($this.attr('class') === "_5pcq" && $this.attr('rel') === undefined){
-            console.log(this);
-        }
-    });
+    var toggleModal = function(){
+    	$div_modal.fadeToggle(300);
+    };
+
+    var setModal = function(postId){
+
+    };
+
+    var createModal = function(){
+    	var $div_modal = $('<div id="modal-container"></div>')
+    	var $h1_modal = $('<h1>Collect this post</h1>');
+
+    	var $modal = $('<div class="modal" id="collectModal"></div>');
+    	var $collectionSelector = $('<select class="collectSelect"><option>+Gostosas</option></select>');
+    	var $sendButton = $('<button class="collectButton">Collect</button>');
+    	var $cancelButton = $('<button class="cancelButton">Cancel</button>');
+    	var $black = $('<div class="black"></div>');
+
+    	$modal.append($h1_modal);
+    	$modal.append($collectionSelector);
+    	$modal.append($sendButton);
+    	$modal.append($cancelButton);
+    	$div_modal.append($modal);
+    	$div_modal.append($black);
+
+    	$black.on('click', function(e){
+    		e.preventDefault();
+    		toggleModal();
+    	});
+    	$div_modal.hide();
+        $('body').append($div_modal);
+        return $div_modal;
+    };
+
 
     function addCollectionSectionToSidebar () {
+    	var $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
+	                    			'<h4 class="navHeader">COLLECTIONS</h4>' +
+	                    			'<ul class="uiSideNav mts mbm nonDroppableNav">' +
+	                      			'</ul>' +
+	                    		'</div>');
+
+    	var $collectionItem = $('<li class="sideNavItem stat_elem">' +
+		                          '<a class="item clearfix sortableItem">' +
+		                            '<div class="rfloat">' +
+		                                '<span class="count">' +
+		                                    '<span class="countValue">20</span>' +
+		                                '</span>' +
+		                            '</div>' +
+		                            '<div>' +
+		                              '<span class="imgWrap"></span>' +
+		                              '<div class="linkWrap hasCount">AlgoDahora</div>' +
+		                            '</div>' +
+		                          '</a>' +
+		                        '</li>');
+
+    	$collectionsNav.find('ul').append($collectionItem);
+
         $('#pagelet_pinned_nav')
-            .append('<div class="homeSideNav collectionsNav">' +
-                      '<h4 class="navHeader">COLLECTIONS</h4>' +
-                      '<ul class="uiSideNav">' +
-
-                        '<li class="sideNavItem stat_elem">' +
-                          '<a>' +
-                            '<div class="rfloat">' +
-                                '<span class="count">' +
-                                    '<span class="countValue">20</span>' +
-                                '</span>' +
-                            '</div>' +
-                            '<div>' +
-                              '<span class="imgWrap"></span>' +
-                              '<div class="linkWrap hasCount">AlgoDahora</div>' +
-                            '</div>' +
-                          '</a>' +
-                        '</li>' +
-
-                        '<li class="sideNavItem stat_elem">' +
-                          '<a>' +
-                            '<div class="rfloat"><span class="count"><span class="countValue">20</span></span></div>' +
-                            '<div>' +
-                              '<span class="imgWrap"></span>' +
-                              '<div class="linkWrap hasCount">AlgoDahora</div>' +
-                            '</div>' +
-                          '</a>' +
-                        '</li>' +
-
-                      '</ul>' +
-                    '</div>');
+            .append($collectionsNav);
     }
 
 
@@ -65,18 +101,9 @@
 
     var sendCollect = function(e){
         e.preventDefault();
-        var data = {
-                userid: myId.toString(),
-                postid: $(this).attr('data-postid')
-            };
-
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(data),
-            url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity'
-        });
+        var postId = $(e).attr('data-postid');
+        setModal(postId);
+        toggleModal();
     };
 
     var setIcons = function(){
@@ -86,7 +113,7 @@
             $this.find('._5pcq').each(function(){
                 var $this = $(this);
                 if($this.attr('class') === "_5pcq"){
-                    var postIdFiler = /[posts|events]\/([0-9]*)/;
+                    var postIdFiler = /\.com(.*[0-9]*)/;
                     var id = $this.attr('href').match(postIdFiler);
                     if(id !== null){
                         postId = id[1];
@@ -111,7 +138,6 @@
         			// contador de likes, comments, shares
 					a.find(".UFIBlingBox.uiBlingBox.feedbackBling").each(function(){
 						var b = $(this);
-						console.log(b);
 						var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\">"
 							+"<span class=\"UFIBlingBoxText\">666</span>" // setar o numero de collects aqui
 							+"</span>");
@@ -120,6 +146,44 @@
                 }
             });
 
+			// likes e shares acima dos comentários.
+			$this.find(".UFIList").each(function(){
+				var a = $(this);
+				//a.css("list-style","none");
+                if(!$this.attr('data-addedCollect2')){
+                    $this.attr('data-addedCollect2', true);
+					
+            		var e = $("<li class=\"UFIRow UFILikeSentence UFIFirstComponent\">"
+					//+"<div class=\"clearfix\">"
+					//+"<div class=\"_ohe lfloat\">"
+					//+"<a class=\"img _8o _8r UFIImageBlockImage UFILikeThumb\" href=\"#\" title=\"Like thiz\" role=\"button\" ><img</a>"
+					+"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\"></a>"
+					//+"<div>"
+					//+"<div class=\"UFIImageBlockContent _42ef _8u\">"
+					//+"<div class=\"UFILikeSentenceText\">"
+					+"<span>"
+					+"<a href=\"#\">" // link para ver pessoas que deram Collect
+					+"747 people" // contador de pessoas
+					+"</a>"
+					+"<span> collected this.</span>"
+					+"</span>"
+					//+"</div>"
+					//+"</div>"
+					//+"</div>"
+					//+"</div>"
+					//+"</div>"
+					+"</li>");
+
+					//var x = $("<span>VISH</span>");
+					//e.insertBefore(a.first());
+					a.prepend(e);
+					//console.log(x);
+                }
+				/*
+				var b = $(this);
+				
+				*/
+			});
 
         });
     };
@@ -134,6 +198,8 @@
 
     function main () {
         myId = getMyId();
+        $div_modal = createModal();
+        addCollectionSectionToSidebar();
         setInterval(setIcons, 1000);
     }
 

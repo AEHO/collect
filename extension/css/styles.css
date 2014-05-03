@@ -4,3 +4,39 @@
 	margin-left: 4px;
 	width: 14px;
 }
+
+#modal-container{
+	height:100%;
+	width: 100%;
+}
+
+.black{
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	top:0;
+	left: 0;
+	z-index:99999;
+	background-color: rgba(0,0,0,0.5);
+}
+
+.modal{
+	position: fixed;
+	height: 500px;
+	width: 500px;
+	margin-top: -250px;
+	margin-left: -250px;
+	top:50%;
+	left:50%;
+	background-color: #fff;
+	z-index:100000;
+	border-radius: 3px;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.modal h1{
+	font-size: 2em;
+}
