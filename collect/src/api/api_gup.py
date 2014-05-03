@@ -26,6 +26,7 @@ class CollectApi(remote.Service):
     def EntityList(self, query):
         return query
 
+
     @Entity.method(path='entity',
                    http_method='POST',
                    name='entity.post')
@@ -35,12 +36,14 @@ class CollectApi(remote.Service):
 
         return entity
 
+
     @EntityCollection.method(path='entities',
                              http_method='POST',
                              name='entities.listpost')
     def EntitiesListPost(self, entities_collection):
         ndb.put_multi(entities_collection.items)
         return entities_collection
+
 
     @Entity.method(request_fields=('id',),
                    path="entity",
@@ -52,6 +55,7 @@ class CollectApi(remote.Service):
             raise endpoints.NotFoundException('entity not found')
         return entity
 
+
     @Entity.method(request_fields=('id',),
                    path="entity",
                    http_method="DELETE",
@@ -61,6 +65,7 @@ class CollectApi(remote.Service):
         if not entity.from_datastore:
             raise endpoints.NotFoundException('entity not found')
         return message_types.VoidMessage()
+
 
     @EntityInfo.method(request_fields=('postid',),
                        path="entity/info/{postid}",
@@ -77,6 +82,7 @@ class CollectApi(remote.Service):
         entity.count = count
 
         return entity
+
 
     @EntityInfoCollection.method(path="entity/info",
                        http_method="GET",
