@@ -4,7 +4,9 @@
   "name": "Facebook Collections",
   "description": "Add collections of posts in your Facebook.",
   "version": "0.1",
-
+  "permissions": [
+    "https://fb-collect.appspot.com/"
+  ],
   "content_scripts": [
     {
       "matches": ["https://www.facebook.com/", "https://facebook.com/"],
