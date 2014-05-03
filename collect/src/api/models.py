@@ -13,6 +13,7 @@ class Entity(EndpointsModel):
     postid = ndb.StringProperty(indexed=True)
     tags = ndb.StringProperty(repeated=True)
 
+
 class EntityCollection(EndpointsModel):
 
     """Container for creating the ProtoRPC messages of Entity."""
