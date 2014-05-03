@@ -53,7 +53,7 @@
           datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
           queryTokenizer: Bloodhound.tokenizers.whitespace,
           // `states` is an array of state names defined in "The Basics"
-          local: [{value: 'alabama'}, {value: 'dahora'}]
+          local: data
         });
 
         states.initialize();
@@ -83,9 +83,10 @@
     getData('ciro').success(function (data) {
       console.log(addCounterToData(data));
 
-      initializeTypeahead(data.items);
+      initializeTypeahead($.map(Object.keys(data.counters), function (item) {
+        return {value: item};
+      }));
     });
-
   });
 
 </script>
