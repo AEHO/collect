@@ -64,11 +64,6 @@
       return $div_modal;
     };
 
-    var viewCollection = function(collection){
-      $('#stream_pagelet').html("");
-    
-    };
-
     function addCounterToData (data) {
       if (!data.items) throw new Error('Data returned error');
 
@@ -81,9 +76,9 @@
         if (tags) {
           for (var j in tags) {
             if (counters[tags[j]]) {
-              counters[tags[j]] += 1;
+              counters[tags[j]].push(items[i]);
             } else {
-              counters[tags[j]] = 1;
+              counters[tags[j]] = [items[i]];
             }
           }
         }
@@ -94,6 +89,24 @@
       return data;
     }
 
+    var setCollectionsEvents = function(){
+      $('.collectionPlus').on('click', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var collection = $this.attr('data-collect');
+        var baseUrl = "https://facebook.com/";
+        $('#stream_pagelet').html("");
+        $('.rightColumnWrapper').remove();
+        $.each(collections.counters[collection], function(index, post){
+          var fullUrl = baseUrl + post.postid;
+          var $element = $("<a href="+fullUrl+"></a>");
+          if(fullUrl.indexOf('photos') > -1){
+            $element.load(fullUrl + " #photoborder");
+          }
+          $('#stream_pagelet').append($element);
+        });
+      });
+    }
 
     function addCollectionSectionToSidebar () {
       var $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
@@ -101,28 +114,29 @@
                             '<ul class="uiSideNav mts mbm nonDroppableNav">' +
                               '</ul>' +
                           '</div>');
+      $.each(collections.counters, function(collection, count){
         var $collectionItem = $('<li class="sideNavItem stat_elem">' +
-                              '<a class="item clearfix sortableItem" data-collect="Gostosas">' +
+                              '<a class="item clearfix sortableItem collectionPlus" data-collect="'+collection+'">' +
                                 '<div class="rfloat">' +
                                     '<span class="count">' +
-                                        '<span class="countValue">20</span>' +
+                                        '<span class="countValue">'+ count.length +'</span>' +
                                     '</span>' +
                                 '</div>' +
                                 '<div>' +
                                   '<span class="imgWrap"></span>' +
-                                  '<div class="linkWrap hasCount">+Gostosas</div>' +
+                                  '<div class="linkWrap hasCount">+'+ collection +'</div>' +
                                 '</div>' +
                               '</a>' +
                             '</li>');
-
+        $collectionsNav.find('ul').append($collectionItem);
+      });
       
-      $collectionsNav.find('ul').append($collectionItem);
-
-        $('#pagelet_pinned_nav')
-            .append($collectionsNav);
-    };
-
-
+      
+      $('#pagelet_bookmark_nav')
+          .prepend($collectionsNav);
+      setCollectionsEvents();
+      
+    }
 
 
     function toggleContentArea (show) {
@@ -249,9 +263,9 @@
         $div_modal = createModal();
         getData(myId).done(function(data){
           collections = addCounterToData(data);
-          //addCollectionSectionToSidebar();
+          console.log(collections);
+          addCollectionSectionToSidebar();
         });
-        addCollectionSectionToSidebar();
         setInterval(setIcons, 1000);
     }
 
