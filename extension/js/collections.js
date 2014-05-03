@@ -19,7 +19,6 @@
     var myId;
     var $div_modal;
     var collections;
-    var postId;
 
     var toggleModal = function(){
       $div_modal.fadeToggle(300);
@@ -108,27 +107,6 @@
             $('#inp-collection').val("").focus();
         });
 
-        $('.collectButton').click(function () {
-            var collections = [];
-            $('#collections-list').children().each(function (key,value) {
-                collections.push($(value).text());
-            });
-
-            $.ajax({
-                url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity',
-                dataType: 'json',
-                contentType: 'application/json; charset=utf-8',
-                type:'POST',
-                data: JSON.stringify({
-                    postid: postId,
-                    userid: myId,
-                    tags: collections
-                })
-            }).success(function (data) {
-                toggleModal();
-            });
-        });
-
         return $div_modal;
     };
 
@@ -162,13 +140,17 @@
         e.preventDefault();
         var $this = $(this);
         var collection = $this.attr('data-collect');
-        var baseUrl = "https://facebook.com/";
+        var baseUrl = "https://facebook.com";
         $('#stream_pagelet').html("");
         $('.rightColumnWrapper').remove();
         $.each(collections.counters[collection], function(index, post){
           var fullUrl = baseUrl + post.postid;
-          var $element = $("<a href="+fullUrl+"></a>");
-          if(fullUrl.indexOf('photos') > -1){
+          var $element = $('<a class="postCollected" href='+fullUrl+'></a>');
+          console.log(fullUrl);
+          if(fullUrl.indexOf('photo.php') > -1){
+            console.log(fullUrl);
+            $element.load(fullUrl + " #fbxPhotoContentContainer");
+          }else if(fullUrl.indexOf('photos') > -1){
             $element.load(fullUrl + " #photoborder");
           }
           $('#stream_pagelet').append($element);
@@ -224,9 +206,31 @@
 
     var sendCollect = function(e){
         e.preventDefault();
-        postId = $(e).attr('data-postid');
-        // setModal(postId);
+        var postId = $(this).attr('data-postid');
 
+        var $collectButton = $('.collectButton');
+        $collectButton.unbind('click');
+        $collectButton.click(function () {
+            var collections = [];
+            $('#collections-list').children().each(function (key,value) {
+                collections.push($(value).text());
+            });
+            var data = JSON.stringify({
+                    postid: postId,
+                    userid: myId,
+                    tags: collections
+                });
+
+            $.ajax({
+                url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                type:'POST',
+                data: data
+            }).success(function (data) {
+                toggleModal();
+            });
+        });
         toggleModal();
     };
 
