@@ -24,10 +24,12 @@
 			$this.find('._5pcq').each(function(){
 				var $this = $(this);
 				if($this.attr('class') === "_5pcq"){
-					var postIdFiler = /[posts|events]\/([0-9]*)/;
+					//https://www.facebook.com/groups/angularjsbrasil/permalink/396544877153305/?stream_ref=1
+					var postIdFiler = /\.com(.*[0-9]*)/;
 					var id = $this.attr('href').match(postIdFiler);
 					if(id !== null){
 						postId = id[1];
+						console.log(postId);
 					}
 				}
 			});
