@@ -28,6 +28,8 @@
 
     function initializeTypeahead (data) {
 
+      console.log(data);
+
         var states = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -50,12 +52,6 @@
 
 
     var createModal = function(){
-
-        if (collections) {
-            initializeTypeahead($.map(Object.keys(data.counters), function (item) {
-                return {value: item};
-            }));
-        }
 
     	var $div_modal = $('<div id="modal-container" class="_s"></div>')
     	var $modal = $('<div class="modal" id="collectModal"></div>');
@@ -191,12 +187,12 @@
       $.each(collections.counters, function(collection, count){
         addNewCollection(collection, count);
       });
-      
-      
+
+
       $('#pagelet_bookmark_nav')
           .prepend($collectionsNav);
       setCollectionsEvents();
-      
+
     };
 
 
@@ -371,6 +367,13 @@
         $div_modal = createModal();
         getData(myId).done(function(data){
           collections = addCounterToData(data);
+
+          if (collections) {
+            initializeTypeahead($.map(Object.keys(data.counters), function (item) {
+                return {value: item};
+            }));
+          }
+
           console.log(collections);
           addCollectionSectionToSidebar();
         });

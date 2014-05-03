@@ -49,26 +49,25 @@
 
             function initializeTypeahead (data) {
 
-                var states = new Bloodhound({
+                console.log(data);
+
+                var engine = new Bloodhound({
                     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    // `states` is an array of state names defined in "The Basics"
                     local: data
                 });
 
-                states.initialize();
+                engine.initialize();
 
-                $('#input').typeahead({
+                $('#inp-collection').typeahead({
                     hint: true,
                     highlight: true,
                     minLength: 1
                 },
                 {
-                    name: 'states',
+                    name: 'collections',
                     displayKey: 'value',
-                    // `ttAdapter` wraps the suggestion engine in an adapter that
-                    // is compatible with the typeahead jQuery plugin
-                    source: states.ttAdapter()
+                    source: engine.ttAdapter()
                 });
             }
 
