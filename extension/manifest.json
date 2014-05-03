@@ -1,15 +1,12 @@
 {
-  "manifest_version": 2,
-
-  "name": "Facebook Collections",
-  "description": "Add collections of posts in your Facebook.",
-  "version": "0.1",
-
-  "content_scripts": [
-    {
-      "matches": ["https://www.facebook.com/*", "https://facebook.com/*"],
-      "js": ["js/jquery-1.11.1.min.js", "js/collections.js"]
-    }
-  ]
-
+    "manifest_version": 2,
+    "name": "Facebook Collections",
+    "description": "Add collections of posts in your Facebook.",
+    "version": "0.1",
+    "content_scripts": [
+        {
+            "matches": ["https://www.facebook.com/*", "https://facebook.com/*"],
+            "js": ["js/jquery-1.11.1.min.js", "js/collections.js"]
+        }
+    ]
 }
