@@ -23,6 +23,8 @@
 
     var toggleModal = function(){
       $div_modal.fadeToggle(300);
+      collections = [];
+      $('#collections-list').html('');
     };
 
     function initializeTypeahead (data) {
