@@ -29,29 +29,39 @@
     };
 
     var createModal = function(){
-      var $div_modal = $('<div id="modal-container"></div>')
-      var $h1_modal = $('<h1>Collect this post</h1>');
+    	var $div_modal = $('<div id="modal-container" class="_s"></div>')
+    	var $modal = $('<div class="modal" id="collectModal"></div>');
+      var $head_modal = $('<div class="_4-i0" id="u_9_0">'
+          +'<div class="clearfix">'
+          +'<div class="_52c9 lfloat _ohe">Collect This Post</div>'
+          +'<div class="_51-u rfloat _ohf">'
+          +'<a class="_42ft _5upp _50zy layerCancel _51-t _50-0 _50z-" role="button" href="#" title="Close" onclick="toggleModal();">Close</a></div>'
+          +'</div></div>');
 
-      var $modal = $('<div class="modal" id="collectModal"></div>');
-      var $collectionSelector = $('<select class="collectSelect"><option>+Gostosas</option></select>');
-      var $sendButton = $('<button class="collectButton">Collect</button>');
-      var $cancelButton = $('<button class="cancelButton">Cancel</button>');
-      var $black = $('<div class="black"></div>');
+    	//var $content = $('<select class="collectSelect"><option>+Gostosas</option></select>');
+      var $content = $('<div class="_4-i2"><div class="pam"><select class="collectSelect"><option>+Gostosas</option></select></div></div>');
+      var $footer = $('<div class="_5a8u"><div class="uiOverlayFooter uiBoxGray noborder"><table class="uiGrid _51mz uiOverlayFooterGrid" cellspacing="0" cellpadding="0"><tbody><tr class="_51mx">'
+          +'<td class="_51m- prs uiOverlayFooterMessage"></td>'
+          +'<td class="_51m- uiOverlayFooterButtons _51mw"><button value="1" class="collectButton _42ft _4jy0 layerConfirm uiOverlayButton _4jy3 _4jy1 selected" type="submit">Collect Post</button><a class="cancelButton _42ft _4jy0 layerCancel uiOverlayButton _4jy3 _517h" role="button" href="#">Cancel</a></td>'
+          +'</tr></tbody></table></div></div>');
 
-      $modal.append($h1_modal);
-      $modal.append($collectionSelector);
-      $modal.append($sendButton);
-      $modal.append($cancelButton);
-      $div_modal.append($modal);
-      $div_modal.append($black);
+      //var $sendButton = $('<button class="collectButton">Collect</button>');
+    	//var $cancelButton = $('<button class="cancelButton">Cancel</button>');
+    	var $black = $('<div class="black"></div>');
 
-      $black.on('click', function(e){
-        e.preventDefault();
-        toggleModal();
-      });
-      $div_modal.hide();
-        $('body').append($div_modal);
-        return $div_modal;
+    	$modal.append($head_modal);
+    	$modal.append($content);
+    	$modal.append($footer);
+    	$div_modal.append($modal);
+    	$div_modal.append($black);
+
+    	$black.on('click', function(e){
+    		e.preventDefault();
+    		toggleModal();
+    	});
+    	$div_modal.hide();
+      $('body').append($div_modal);
+      return $div_modal;
     };
 
     var viewCollection = function(collection){
@@ -91,7 +101,6 @@
                             '<ul class="uiSideNav mts mbm nonDroppableNav">' +
                               '</ul>' +
                           '</div>');
-      $.each(collections.items, function(index, collection){
         var $collectionItem = $('<li class="sideNavItem stat_elem">' +
                               '<a class="item clearfix sortableItem" data-collect="Gostosas">' +
                                 '<div class="rfloat">' +
@@ -106,13 +115,12 @@
                               '</a>' +
                             '</li>');
 
-      });
       
       $collectionsNav.find('ul').append($collectionItem);
 
         $('#pagelet_pinned_nav')
             .append($collectionsNav);
-    }
+    };
 
 
 
@@ -243,6 +251,7 @@
           collections = addCounterToData(data);
           //addCollectionSectionToSidebar();
         });
+        addCollectionSectionToSidebar();
         setInterval(setIcons, 1000);
     }
 
