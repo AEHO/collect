@@ -229,13 +229,16 @@ class _EndpointsQueryInfo(object):
       current_value = getattr(entity, attr_name)
 
       if prop._repeated:
-        if current_value != []:
-          raise ValueError('No queries on repeated values are allowed.')
-        continue
+        for list_value in current_value:
+          self._AddFilter(prop == list_value)
+      else:
+        # Only filter for non-null values
+        if current_value is not None:
+          self._AddFilter(prop == current_value)
 
-      # Only filter for non-null values
-      if current_value is not None:
-        self._AddFilter(prop == current_value)
+      # # Only filter for non-null values
+      # if current_value is not None:
+      #   self._AddFilter(prop == current_value)
 
   def SetQuery(self):
     """Sets the final query on the query info object.

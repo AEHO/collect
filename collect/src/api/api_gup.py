@@ -8,6 +8,7 @@ from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
 from api.models import Entity, EntityCollection
+from api.models import Info
 
 @endpoints.api(name="collectapi", version="v1", description="Collect Facebook API",
                allowed_client_ids=[endpoints.API_EXPLORER_CLIENT_ID],
@@ -57,30 +58,3 @@ class CollectApi(remote.Service):
         if not entity.from_datastore:
             raise endpoints.NotFoundException('entity not found')
         return message_types.VoidMessage()
-
-    # @Entity.method(path='entity/bounce',
-    #                http_method='POST',
-    #                name='entity.bounce.post')
-    # def EntityBouncePost(self, entity):
-    #     entity.put()
-    #     return entity
-
-    # @Entity.method(request_fields=('id',),
-    #                path="entity/bounce",
-    #                http_method="GET",
-    #                name="entity.bounce.get")
-    # def EntityBounceGet(self, entity):
-    #     """Queries the DB for an Entity with the given ID."""
-    #     if not entity.from_datastore:
-    #         raise endpoints.NotFoundException('entity not found')
-    #     return entity
-
-    # @Entity.method(request_fields=('id',),
-    #                path="entity/bounce",
-    #                http_method="DELETE",
-    #                name="entity.bounce.delete")
-    # def EntityBounceDelete(self, entity):
-    #     """Queries the DB for an Entity with the given ID."""
-    #     if not entity.from_datastore:
-    #         raise endpoints.NotFoundException('entity not found')
-    #     return message_types.VoidMessage()

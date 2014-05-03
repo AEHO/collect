@@ -53,6 +53,7 @@
         return $div_modal;
     };
 
+
     function addCollectionSectionToSidebar () {
     	var $collectionsNav = $('<div class="homeSideNav collectionsNav">' +
 	                    			'<h4 class="navHeader">COLLECTIONS</h4>' +
@@ -145,6 +146,44 @@
                 }
             });
 
+			// likes e shares acima dos comentários.
+			$this.find(".UFIList").each(function(){
+				var a = $(this);
+				//a.css("list-style","none");
+                if(!$this.attr('data-addedCollect2')){
+                    $this.attr('data-addedCollect2', true);
+					
+            		var e = $("<li class=\"UFIRow UFILikeSentence UFIFirstComponent\">"
+					//+"<div class=\"clearfix\">"
+					//+"<div class=\"_ohe lfloat\">"
+					//+"<a class=\"img _8o _8r UFIImageBlockImage UFILikeThumb\" href=\"#\" title=\"Like thiz\" role=\"button\" ><img</a>"
+					+"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\"></a>"
+					//+"<div>"
+					//+"<div class=\"UFIImageBlockContent _42ef _8u\">"
+					//+"<div class=\"UFILikeSentenceText\">"
+					+"<span>"
+					+"<a href=\"#\">" // link para ver pessoas que deram Collect
+					+"747 people" // contador de pessoas
+					+"</a>"
+					+"<span> collected this.</span>"
+					+"</span>"
+					//+"</div>"
+					//+"</div>"
+					//+"</div>"
+					//+"</div>"
+					//+"</div>"
+					+"</li>");
+
+					//var x = $("<span>VISH</span>");
+					//e.insertBefore(a.first());
+					a.prepend(e);
+					//console.log(x);
+                }
+				/*
+				var b = $(this);
+				
+				*/
+			});
 
         });
     };
