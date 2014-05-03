@@ -170,15 +170,15 @@
                 var $removeBtn = $('<a href="#">X Remove</a>');
                 $removeBtn.on('click', function(e){
                   console.log(post.id);
-                  var data = {
-                    id: post.id
-                  };
+                  // var data = {
+                  //   id: post.id
+                  // };
 
                   $.ajax({
-                    url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity',
-                    type:'DELETE',
-                    data: data
+                    url: 'https://fb-collect.appspot.com/_ah/api/collectapi/v1/entity?id=' + post.id,
+                    type:'DELETE'
                   }).success(function(){
+                    $removeBtn.remove();
                     $element.remove();
                   });
 
