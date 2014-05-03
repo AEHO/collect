@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+        <title></title>
 </head>
 <body>
 
@@ -13,80 +13,81 @@
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/typeahead.bundle.min.js"></script>
 <script type="text/javascript">
-  $(function () {
+    $(function () {
 
-      function getData (userid) {
-        return $.ajax({
-          type: 'GET',
-          url: 'http://localhost:8080/_ah/api/collectapi/v1/entities?userid=' + userid
-        });
-      }
-
-      function addCounterToData (data) {
-        if (!data.items) throw new Error('Data returned error');
-
-        var counters = {};
-
-        var items = data.items;
-        for (var i in items) {
-          var tags = items[i].tags;
-
-          if (tags) {
-            for (var j in tags) {
-              if (counters[tags[j]]) {
-                counters[tags[j]] += 1;
-              } else {
-                counters[tags[j]] = 1;
-              }
+            function getData (userid) {
+                return $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/_ah/api/collectapi/v1/entities?userid=' + userid
+                });
             }
-          }
-        }
 
-        data.counters = counters;
+            function addCounterToData (data) {
+                if (!data.items) throw new Error('Data returned error');
 
-        return data;
-      }
+                var counters = {};
 
-      function initializeTypeahead (data) {
+                var items = data.items;
+                for (var i in items) {
+                    var tags = items[i].tags;
 
-        var states = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          // `states` is an array of state names defined in "The Basics"
-          local: [{value: 'alabama'}, {value: 'dahora'}]
+                    if (tags) {
+                        for (var j in tags) {
+                            if (counters[tags[j]]) {
+                                counters[tags[j]] += 1;
+                            } else {
+                                counters[tags[j]] = 1;
+                            }
+                        }
+                    }
+                }
+
+                data.counters = counters;
+
+                return data;
+            }
+
+            function initializeTypeahead (data) {
+
+                var states = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    // `states` is an array of state names defined in "The Basics"
+                    local: data
+                });
+
+                states.initialize();
+
+                $('#input').typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    name: 'states',
+                    displayKey: 'value',
+                    // `ttAdapter` wraps the suggestion engine in an adapter that
+                    // is compatible with the typeahead jQuery plugin
+                    source: states.ttAdapter()
+                });
+            }
+
+        $('#submit-btn').click(function (ev) {
+            ev.preventDefault();
+
+            var value = $('#input').val();
+            $('#adicionados').append("<li>" + value + "</li>");
+            $('#input').val("").focus();
         });
 
-        states.initialize();
+        getData('ciro').success(function (data) {
+            console.log(addCounterToData(data));
 
-        $('#input').typeahead({
-          hint: true,
-          highlight: true,
-          minLength: 1
-        },
-        {
-          name: 'states',
-          displayKey: 'value',
-          // `ttAdapter` wraps the suggestion engine in an adapter that
-          // is compatible with the typeahead jQuery plugin
-          source: states.ttAdapter()
+            initializeTypeahead($.map(Object.keys(data.counters), function (item) {
+                return {value: item};
+            }));
         });
-      }
-
-    $('#submit-btn').click(function (ev) {
-      ev.preventDefault();
-
-      var value = $('#input').val();
-      $('#adicionados').append("<li>" + value + "</li>");
-      $('#input').val("").focus();
     });
-
-    getData('ciro').success(function (data) {
-      console.log(addCounterToData(data));
-
-      initializeTypeahead(data.items);
-    });
-
-  });
 
 </script>
 </body>
