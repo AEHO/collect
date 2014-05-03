@@ -162,7 +162,7 @@
                 }
             });
 
-            // contem os botões Like, Comment, Share.
+            // contem os botões Like ·  Comment · Collect ·  Share.
             $this.find("._5pcp._5vsi.lfloat._ohe").each(function(){
                 var a = $(this);
                 if(!$this.attr('data-addedCollect')){
@@ -176,56 +176,72 @@
                         $(this).after(" · ");
                     });
 
-              // contador de likes, comments, shares
-          a.find(".UFIBlingBox.uiBlingBox.feedbackBling").each(function(){
-            var b = $(this);
-            var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\">"
-              +"<span class=\"UFIBlingBoxText\">666</span>" // setar o numero de collects aqui
-              +"</span>");
-            b.append(e);
-          });
+                      // contador de likes, comments, shares
+                      a.find(".UFIBlingBox.uiBlingBox.feedbackBling").each(function(){
+                        var b = $(this);
+                        var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\">"
+                          +"<span class=\"UFIBlingBoxText\">666</span>" // setar o numero de collects aqui
+                          +"</span>");
+                        b.append(e);
+                      });
                 }
             });
 
-      // likes e shares acima dos comentários.
-      $this.find(".UFIList").each(function(){
-        var a = $(this);
-        //a.css("list-style","none");
-                if(!$this.attr('data-addedCollect2')){
-                    $this.attr('data-addedCollect2', true);
-          
-                var e = $("<li class=\"UFIRow UFILikeSentence UFIFirstComponent\">"
-          //+"<div class=\"clearfix\">"
-          //+"<div class=\"_ohe lfloat\">"
-          //+"<a class=\"img _8o _8r UFIImageBlockImage UFILikeThumb\" href=\"#\" title=\"Like thiz\" role=\"button\" ><img</a>"
-          +"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\"></a>"
-          //+"<div>"
-          //+"<div class=\"UFIImageBlockContent _42ef _8u\">"
-          //+"<div class=\"UFILikeSentenceText\">"
-          +"<span>"
-          +"<a href=\"#\">" // link para ver pessoas que deram Collect
-          +"747 people" // contador de pessoas
-          +"</a>"
-          +"<span> collected this.</span>"
-          +"</span>"
-          //+"</div>"
-          //+"</div>"
-          //+"</div>"
-          //+"</div>"
-          //+"</div>"
-          +"</li>");
+          // likes e shares acima dos comentários.
+          $this.find(".UFIList").each(function(){
+            var a = $(this);
+            //a.css("list-style","none");
+                    if(!$this.attr('data-addedCollect2')){
+                        $this.attr('data-addedCollect2', true);
+              
+                    var e = $("<li class=\"UFIRow UFILikeSentence UFIFirstComponent\">"
+              //+"<div class=\"clearfix\">"
+              //+"<div class=\"_ohe lfloat\">"
+              //+"<a class=\"img _8o _8r UFIImageBlockImage UFILikeThumb\" href=\"#\" title=\"Like thiz\" role=\"button\" ><img</a>"
+              +"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\"></a>"
+              //+"<div>"
+              //+"<div class=\"UFIImageBlockContent _42ef _8u\">"
+              //+"<div class=\"UFILikeSentenceText\">"
+              +"<span>"
+              +"<a href=\"#\">" // link para ver pessoas que deram Collect
+              +"747 people" // contador de pessoas
+              +"</a>"
+              +"<span> collected this.</span>"
+              +"</span>"
+              //+"</div>"
+              //+"</div>"
+              //+"</div>"
+              //+"</div>"
+              //+"</div>"
+              +"</li>");
 
-          //var x = $("<span>VISH</span>");
-          //e.insertBefore(a.first());
-          a.prepend(e);
-          //console.log(x);
-                }
-        /*
-        var b = $(this);
-        
-        */
-      });
+              //var x = $("<span>VISH</span>");
+              //e.insertBefore(a.first());
+              a.prepend(e);
+              //console.log(x);
+                    }
+            /*
+            var b = $(this);
+            
+            */
+          });
 
+        });
+
+        // botões Like ·  Comment · Collect ·  Share em fotos e videos 
+        $('.UIActionLinks.UIActionLinks_bottom').each(function(){
+            var a = $(this);
+            if(!a.attr('data-addedCollect')){
+                a.attr('data-addedCollect', true);
+                // vai incluir o Collect depois do botão de Comment
+                a.find(".uiLinkButton.comment_link").each(function(){
+                    var e = $("<a class=\"collect_button\" href=\"#\">Collect</a>");
+                    //e.attr('data-postid', postId);
+                    e.on('click', sendCollect);
+                    a.after(e);
+                    a.after(" · ");
+                });
+            }
         });
     };
 
