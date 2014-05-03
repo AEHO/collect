@@ -142,11 +142,13 @@
         $('#stream_pagelet').html("");
         $('.rightColumnWrapper').remove();
         $.each(collections.counters[collection], function(index, post){
-          var fullUrl = baseUrl + post.postid;
+          if(post.postid.indexOf('facebook') >-1){
+            var fullUrl = post.postid;
+          }else{
+            var fullUrl = baseUrl + post.postid;
+          }
           var $element = $('<a class="postCollected" href='+fullUrl+'></a>');
-          console.log(fullUrl);
           if(fullUrl.indexOf('photo.php') > -1){
-            console.log(fullUrl);
             $element.load(fullUrl + " #fbxPhotoContentContainer");
           }else if(fullUrl.indexOf('photos') > -1){
             $element.load(fullUrl + " #photoborder");
@@ -205,14 +207,15 @@
     var sendCollect = function(e){
         e.preventDefault();
         var postId = $(this).attr('data-postid');
-
         var $collectButton = $('.collectButton');
+
         $collectButton.unbind('click');
         $collectButton.click(function () {
             var collections = [];
             $('#collections-list').children().each(function (key,value) {
                 collections.push($(value).text());
             });
+            console.log(postId);
             var data = JSON.stringify({
                     postid: postId,
                     userid: myId,
@@ -239,11 +242,7 @@
             $this.find('._5pcq').each(function(){
                 var $this = $(this);
                 if($this.attr('class') === "_5pcq"){
-                    var postIdFiler = /\.com(.*[0-9]*)/;
-                    var id = $this.attr('href').match(postIdFiler);
-                    if(id !== null){
-                        postId = id[1];
-                    }
+                    postId = $this.attr('href');
                 }
             });
 
@@ -272,7 +271,6 @@
                 }
             });
 
-// <<<<<<< HEAD
       // likes e shares acima dos comentários.
       $this.find(".UFIList").each(function(){
         var a = $(this);
