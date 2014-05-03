@@ -98,9 +98,8 @@ class CollectApi(remote.Service):
     #                http_method="POST",
     #                name="bounce.make")
     # def BounceMake(self, entity):
-    #     if not entity.tags:
-    #         raise endpoints.BadRequestException('Malformed Entity')
-
+    #     entity.tags = ['__bounce__'];
+    #     entity.put()
     #     return entity
 
 
@@ -108,4 +107,9 @@ class CollectApi(remote.Service):
     #                http_method="GET",
     #                name="bounce.consume")
     # def BounceConsume(self, entity):
-    #     return entity
+    #     iterator = Entity.query(ndb.AND(Entity.postid == entity.postid,
+    #                             Entity.userid == entity.userid)).iter()
+    #     # if iterator.has_next():
+    #     #     return entity
+
+    #     return message_types.VoidMessage()

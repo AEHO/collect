@@ -11,6 +11,7 @@ class Entity(EndpointsModel):
     userid = ndb.StringProperty(indexed=True)
     postid = ndb.StringProperty(indexed=True)
     tags = ndb.StringProperty(repeated=True)
+    consumed = ndb.IntegerProperty()
     icon = ndb.IntegerProperty()
 
 class EntityCollection(EndpointsModel):
