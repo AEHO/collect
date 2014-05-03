@@ -23,6 +23,8 @@
 
     var toggleModal = function(){
       $div_modal.fadeToggle(300);
+      collections = [];
+      $('#collections-list').html('');
     };
 
     function initializeTypeahead (data) {
@@ -262,7 +264,7 @@
                       // contador de likes, comments, shares
                       a.find(".UFIBlingBox.uiBlingBox.feedbackBling").each(function(){
                         var b = $(this);
-                        var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\">"
+                        var e = $("<span><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/collect_E1.png") + "\">"
                           +"<span class=\"UFIBlingBoxText\">666</span>" // setar o numero de collects aqui
                           +"</span>");
                         b.append(e);
@@ -282,7 +284,7 @@
 					//+"<div class=\"clearfix\">"
 					//+"<div class=\"_ohe lfloat\">"
 					//+"<a class=\"img _8o _8r UFIImageBlockImage UFILikeThumb\" href=\"#\" title=\"Like thiz\" role=\"button\" ><img</a>"
-					+"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\"></a>"
+					+"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/collect_E1.png") + "\"></a>"
 					//+"<div>"
 					//+"<div class=\"UFIImageBlockContent _42ef _8u\">"
 					//+"<div class=\"UFILikeSentenceText\">"
@@ -360,7 +362,7 @@
                 a.attr('data-addedCollect', true);
                 // vai incluir o Collect depois do botão de Comment
                 a.find(".uiLinkButton.comment_link").each(function(){
-                    var e = $("<a class=\"collect_button\" href=\"#\">Collect</a>");
+                    var e = $('<a class="collect_button uiLinkBut" href="#">Collect</a>');
                     //e.attr('data-postid', postId);
                     e.on('click', sendCollect);
                     a.after(e);

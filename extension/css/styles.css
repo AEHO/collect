@@ -2,7 +2,8 @@
 	bottom: 0;
 	margin-right: 4px;
 	margin-left: 4px;
-	width: 14px;
+	height: 13px;
+	width: 15px;
 }
 
 #modal-container{
@@ -36,4 +37,12 @@
 
 .modal h1{
 	font-size: 2em;
+}
+
+#collections-list li:before{
+	content: "+";
+}
+#collections-list{
+	font-style: bold;
+	font-size: 14pt;
 }
