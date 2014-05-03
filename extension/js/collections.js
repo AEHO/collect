@@ -28,6 +28,8 @@
 
     function initializeTypeahead (data) {
 
+      console.log(data);
+
         var states = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -50,12 +52,6 @@
 
 
     var createModal = function(){
-
-        if (collections) {
-            initializeTypeahead($.map(Object.keys(data.counters), function (item) {
-                return {value: item};
-            }));
-        }
 
     	var $div_modal = $('<div id="modal-container" class="_s"></div>')
     	var $modal = $('<div class="modal" id="collectModal"></div>');
@@ -182,12 +178,12 @@
                             '</li>');
         $collectionsNav.find('ul').append($collectionItem);
       });
-      
-      
+
+
       $('#pagelet_bookmark_nav')
           .prepend($collectionsNav);
       setCollectionsEvents();
-      
+
     };
 
 
@@ -316,47 +312,6 @@
 				*/
 			});
 
-// =======
-//           // likes e shares acima dos comentários.
-//           $this.find(".UFIList").each(function(){
-//             var a = $(this);
-//             //a.css("list-style","none");
-//                     if(!$this.attr('data-addedCollect2')){
-//                         $this.attr('data-addedCollect2', true);
-
-//                     var e = $("<li class=\"UFIRow UFILikeSentence UFIFirstComponent\">"
-//               //+"<div class=\"clearfix\">"
-//               //+"<div class=\"_ohe lfloat\">"
-//               //+"<a class=\"img _8o _8r UFIImageBlockImage UFILikeThumb\" href=\"#\" title=\"Like thiz\" role=\"button\" ><img</a>"
-//               +"<a href=\"#\" title=\"Collect this\" role=\"button\"><img class=\"Collect_Counter_Icon\" src=\"" + chrome.extension.getURL("img/botao_collect_vA1.png") + "\"></a>"
-//               //+"<div>"
-//               //+"<div class=\"UFIImageBlockContent _42ef _8u\">"
-//               //+"<div class=\"UFILikeSentenceText\">"
-//               +"<span>"
-//               +"<a href=\"#\">" // link para ver pessoas que deram Collect
-//               +"747 people" // contador de pessoas
-//               +"</a>"
-//               +"<span> collected this.</span>"
-//               +"</span>"
-//               //+"</div>"
-//               //+"</div>"
-//               //+"</div>"
-//               //+"</div>"
-//               //+"</div>"
-//               +"</li>");
-
-//               //var x = $("<span>VISH</span>");
-//               //e.insertBefore(a.first());
-//               a.prepend(e);
-//               //console.log(x);
-//                     }
-//             /*
-//             var b = $(this);
-
-//             */
-//           });
-// >>>>>>> 1b1a28b7b1dfed0951c29411037a5bdc6fa4f847
-
         });
 
         // botões Like ·  Comment · Collect ·  Share em fotos e videos
@@ -396,6 +351,13 @@
         $div_modal = createModal();
         getData(myId).done(function(data){
           collections = addCounterToData(data);
+
+          if (collections) {
+            initializeTypeahead($.map(Object.keys(data.counters), function (item) {
+                return {value: item};
+            }));
+          }
+
           console.log(collections);
           addCollectionSectionToSidebar();
         });
